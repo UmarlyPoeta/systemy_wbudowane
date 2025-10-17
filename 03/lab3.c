@@ -35,11 +35,11 @@ int main ()  {
 // --- 3 ---
 // --- Konfiguracja watchdoga ---
 // Opis - rozdzial 21 w Reference Manual.
-/*	
+
 	IWDG->KR = 0x5555;													// Odblokowanie rejestrow konfig.
-	IWDG->PR = 1;																// Preskaler /32
+	IWDG->PR = 3;																// Preskaler /32
 	IWDG->KR = 0xCCCC;													// Wlacz watchdoga.
-*/
+
 // Klucz przeladowujacy watchdoga:
 //		IWDG->KR = 0xAAAA;
 	
@@ -69,31 +69,31 @@ int main ()  {
 // z linii A0 (EXTI0, zbocze rosnace 0->1, niebieski przycisk).
 // Opis - rozdzial 12.2 w Reference Manual.
 // ---------
-/*
-	EXTI->IMR	=							// "odmaskuj"/wlacz linie EXTI0
-	EXTI->RTSR =						// ustaw reakcje na zbocze rosnace 0->1
-*/
+
+	EXTI->IMR = (1<<0);						// "odmaskuj"/wlacz linie EXTI0
+	EXTI->RTSR = (1<<0);						// ustaw reakcje na zbocze rosnace 0->1
+
 // --- 2 ---
 // Ustaw priorytety przerwan:
 // timera TIM7 i zewnetrzengo EXTI0 tak, aby obsluga
 // przerwania timera 7 nie byla nigdy blokowana.
 // Opis w rozdziale 4.3.7. Programming Manual.
 // Priorytet n-tego przerwania ustawia sie w rejestrze IP[n].
-/*
-	NVIC->IP[] =
-	NVIC->IP[] =
-	NVIC->IP[] =
-*/
+
+	NVIC->IP[6] = 0x40;
+	NVIC->IP[54] = 0x80;
+	NVIC->IP[55] = 0x80;
+
 // --- 1a ---
 // Wlacz linie przerwan: zewnetrzne EXTI0 i timera TIM7
 // w kontrolerze przerwan (NVIC).
 // Tablica wektorow przerwan - Table 63. Reference Manual, kolumna "posistion".
 // Kazdy rejestr ISER[n] ma 32 bity.
 // ISER[0] obsluguje przerwania od 0 do 31, ISER[1] - od 32 do 63 itd.
-/*
-	NVIC->ISER[0] =
-	NVIC->ISER[1] =
-*/
+
+	NVIC->ISER[0] = (1 << 6);
+	NVIC->ISER[1] = (3 << (54 - 32));
+
 //==============================================
 // --- Petla glowna ---
 
@@ -108,6 +108,7 @@ int main ()  {
 		GLCD_SetTextColor(White);		
 		sprintf(tekst,"int7 = %u",int7);
 		GLCD_DisplayString(2, 0, tekst);
+		IWDG->KR = 0xAAAA;
 	}
 }
 
