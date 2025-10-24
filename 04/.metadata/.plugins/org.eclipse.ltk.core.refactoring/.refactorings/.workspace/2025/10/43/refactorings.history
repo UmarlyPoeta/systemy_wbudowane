@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;04/Core/Startup/startup_stm32f429zitx.s&apos;" deleteContents="false" description="Delete resource &apos;04/Core/Startup/startup_stm32f429zitx.s&apos;" element1="/04/Core/Startup/startup_stm32f429zitx.s" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1761305840258"/>
+</session>

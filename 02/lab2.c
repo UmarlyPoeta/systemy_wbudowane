@@ -58,13 +58,13 @@ int main(void){
 // - (TS) wejscie synchronizacji licznika TI1 Edge Detector lub Filtered Timer Input 1.
 // Opis rejestru TIMx Slave Mode Control Register (TIMx->SMCR) - Reference Manual, rozdzial 18.4.3.
 
-	TIM2->SMCR = (4 << 0) | (4 << 5);
+	TIM2->SMCR = (0x4 << 0) | (0x3 << 4);
 
 // Wlacz tryb Capture kanalu 1. - zapisu wartosci chwilowej licznika CNT do rejestru CCR1.
 // oraz ustaw reakcje wejscia sterujacego praca timera na oba zbocza: rosnace i opadajace.
 // Opis rejestru TIMx Capture/Compare Enable Register (TIMx->CCER) - Reference Manual, rozdzial 18.4.9.
 
-	TIM2->CCER = (3 << 0) | (1 << 3);
+	TIM2->CCER = (1 << 0) | (1 << 1) | (1 << 3);
 
 	TIM2->EGR |= 1;															// Reinicjalizacja licznika, przeladowanie rejestrow.
   TIM2->CR1 |= 1;															// Wlacz licznik.
@@ -81,7 +81,7 @@ int main(void){
 // Odczytaj i wyskaluj (do dziesiatych czesci sekundy)
 // wartosc z rejestru Caputer/Compare kanalu 1 timera 2 (CCR1).
 
-				sprintf(tekst,"Czas = %u %cs      ", TIM2->CCR1, 0x90);
+				sprintf(tekst,"Czas = %.1f s      ", (float)TIM2->CCR1 / 1000.0f);
 				GLCD_DisplayString(1, 0, __FI,tekst);
 			}
 	}
